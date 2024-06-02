@@ -1,0 +1,50 @@
+# Ce modèle AWS SAM a été généré à partir de la configuration de votre fonction.
+# Si votre fonction possède un ou plusieurs déclencheurs, notez que les ressources
+# AWS associées à ces déclencheurs ne sont pas entièrement spécifiées dans ce
+# modèle et qu'elles incluent des valeurs d'espace réservé. Ouvrez ce modèle dans
+# AWS Application Composer ou dans votre IDE préféré et modifiez-le pour spécifier
+# une application sans serveur avec d'autres ressources AWS.
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Serverless Application Model template describing your function.
+Resources:
+  appPodometercalcul:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Description: ''
+      MemorySize: 128
+      Timeout: 3
+      Handler: index.handler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: 512
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      PackageType: Zip
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+              Resource: arn:aws:logs:eu-north-1:637423371000:*
+            - Effect: Allow
+              Action:
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource:
+                - >-
+                  arn:aws:logs:eu-north-1:637423371000:log-group:/aws/lambda/appPodometer_calcul:*
+      SnapStart:
+        ApplyOn: None
+      Events:
+        Api1:
+          Type: Api
+          Properties:
+            Path: /step
+            Method: POST
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
